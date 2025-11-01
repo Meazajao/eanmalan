@@ -1,0 +1,19 @@
+# Node
+node_modules/
+
+# Environment / secrets
+.env
+
+# Build/output
+dist/
+build/
+.next/
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+
+/src/generated/prisma
+prisma/dev.db
