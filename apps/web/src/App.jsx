@@ -1,46 +1,59 @@
-import { useState, useEffect } from 'react';
-import { getTickets, createTicket } from './api';
-import TicketForm from './components/TicketForm';
-import TicketList from './components/TicketList';
-import './App.css';
+import { useState, useEffect } from "react";
+import LoginForm from "./pages/LoginForm";
+import AdminDashboard from "./pages/AdminDashboard";
+import UserDashboard from "./pages/UserDashboard";
+import "./App.css";
 
 export default function App() {
-  const [tickets, setTickets] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  // 🔹 Kolla om användare redan är inloggad
   useEffect(() => {
-    (async () => {
+    const token = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (token && storedUser) {
       try {
-        setLoading(true);
-        const data = await getTickets();
-        setTickets(data);
+        setUser(JSON.parse(storedUser));
       } catch {
-        setError('Kunde inte läsa tickets');
-      } finally {
-        setLoading(false);
+        console.error("Kunde inte läsa användardata");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
       }
-    })();
+    }
+    setLoading(false);
   }, []);
 
-  async function handleCreate(form) {
-    try {
-      setLoading(true);
-      const created = await createTicket(form);
-      setTickets(prev => [created, ...prev]);
-    } catch {
-      setError('Kunde inte skapa ticket');
-    } finally {
-      setLoading(false);
-    }
+  // 🔹 När användaren loggar in
+  function handleLogin(userData, token) {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
   }
 
+  // 🔹 Logga ut
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+  }
+
+  if (loading) return <p>Laddar...</p>;
+
+  // 🔹 Om ingen är inloggad
+  if (!user) {
+    return <LoginForm onLogin={handleLogin} />;
+  }
+
+  // 🔹 Om användare finns, visa rätt dashboard
   return (
     <main className="app-container">
-      <h1 className="app-title">E-Anmälan</h1>
-      {error && <p className="error-text">{error}</p>}
-      <TicketForm onCreate={handleCreate} loading={loading} />
-      <TicketList tickets={tickets} />
+      {user.role === "ADMIN" ? (
+        <AdminDashboard user={user} onLogout={handleLogout} />
+      ) : (
+        <UserDashboard user={user} onLogout={handleLogout} />
+      )}
     </main>
   );
 }

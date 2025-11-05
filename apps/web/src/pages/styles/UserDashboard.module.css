@@ -1,0 +1,150 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #111827, #1f2937);
+  color: #f9fafb;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e293b;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  color: #60a5fa;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+}
+
+.userInfo button {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.userInfo button:hover {
+  background: #dc2626;
+}
+
+/* --- Form sektionen --- */
+.formSection {
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 1.5rem;
+  max-width: 700px;
+  width: 100%;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.formSection h2 {
+  margin-bottom: 1rem;
+  color: #93c5fd;
+  font-weight: 600;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form input,
+.form textarea,
+.form select {
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #f9fafb;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.form input:focus,
+.form textarea:focus,
+.form select:focus {
+  border-color: #60a5fa;
+}
+
+.form button {
+  background: #3b82f6;
+  color: white;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.form button:hover {
+  background: #2563eb;
+}
+
+/* --- Ticket listan --- */
+.ticketList {
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 1.5rem;
+  max-width: 700px;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.ticketList h2 {
+  color: #93c5fd;
+  margin-bottom: 1rem;
+}
+
+.ticket {
+  background: #0f172a;
+  padding: 1rem;
+  border-radius: 6px;
+  border-left: 6px solid #3b82f6;
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.ticket:hover {
+  transform: translateX(4px);
+}
+
+.ticket h3 {
+  color: #60a5fa;
+  margin-bottom: 0.5rem;
+}
+
+.ticket p {
+  margin: 0.3rem 0;
+  color: #e2e8f0;
+}
+
+.error {
+  color: #f87171;
+  text-align: center;
+  font-weight: 500;
+}

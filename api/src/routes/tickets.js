@@ -1,12 +1,11 @@
 import express from "express";
-import { getTickets, createTicket } from "../controllers/ticketsController.js";
+import { getTickets, createTicket, closeTicket } from "../controllers/ticketsController.js";
+import { authenticate } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Hämta alla tickets
-router.get("/", getTickets);
-
-// Skapa nytt ticket
-router.post("/", createTicket);
+router.get("/", authenticate, getTickets);
+router.post("/", authenticate, createTicket);
+router.patch("/:id/close", authenticate, closeTicket);
 
 export default router;
