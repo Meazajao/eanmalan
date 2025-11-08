@@ -1,88 +1,134 @@
-.chatBox {
-    background-color: #1e1e2f;
-    color: #f3f4f6;
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    margin-top: 1.5rem;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
   }
   
-  .title {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+  .chatBox {
+    background: #1e293b;
+    color: #f9fafb;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+  }
+  
+  .header {
+    background: #0f172a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #334155;
+  }
+  
+  .header h2 {
     color: #60a5fa;
+    font-size: 1rem;
+  }
+  
+  .header button {
+    background: #ef4444;
+    border: none;
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .header button:hover {
+    background: #dc2626;
   }
   
   .messages {
-    max-height: 300px;
+    flex: 1;
     overflow-y: auto;
-    background-color: #2a2a40;
-    border-radius: 0.5rem;
     padding: 1rem;
-    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
   }
   
   .message {
-    padding: 0.5rem 0.8rem;
-    margin-bottom: 0.75rem;
-    border-radius: 0.5rem;
+    display: flex;
   }
   
   .admin {
-    background-color: #334155;
-    text-align: right;
+    justify-content: flex-end;
   }
   
   .user {
-    background-color: #3b3b58;
-    text-align: left;
+    justify-content: flex-start;
   }
   
-  .sender {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #93c5fd;
+  .bubble {
+    max-width: 70%;
+    padding: 0.8rem;
+    border-radius: 10px;
+    background: #0f172a;
+    border: 1px solid #334155;
   }
   
-  .text {
-    margin: 0.3rem 0;
+  .admin .bubble {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
   }
   
-  .time {
+  .bubble small {
+    display: block;
     font-size: 0.75rem;
-    color: #9ca3af;
+    margin-top: 0.3rem;
+    color: #cbd5e1;
   }
   
-  .form {
+  .inputArea {
     display: flex;
-    gap: 0.5rem;
+    padding: 1rem;
+    border-top: 1px solid #334155;
+    background: #0f172a;
   }
   
-  .form input {
+  .inputArea input {
     flex: 1;
-    padding: 0.6rem 1rem;
-    border-radius: 0.5rem;
-    border: none;
-    background-color: #374151;
-    color: #f3f4f6;
+    padding: 0.7rem;
+    border-radius: 6px;
+    border: 1px solid #334155;
+    background: #1e293b;
+    color: white;
+    outline: none;
+    margin-right: 0.5rem;
   }
   
-  .form button {
-    background-color: #2563eb;
+  .inputArea button {
+    background: #3b82f6;
     color: white;
     border: none;
-    border-radius: 0.5rem;
-    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    padding: 0.7rem 1rem;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: background 0.3s;
   }
   
-  .form button:hover {
-    background-color: #1d4ed8;
+  .inputArea button:hover {
+    background: #2563eb;
   }
   
   .error {
-    color: #f87171;
     text-align: center;
+    color: #f87171;
+    padding: 0.5rem;
+  }
+  
+  .empty {
+    text-align: center;
+    color: #94a3b8;
   }
   

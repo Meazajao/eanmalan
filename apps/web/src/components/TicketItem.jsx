@@ -1,8 +1,8 @@
 export default function TicketItem({ t, onClose }) {
   const getPriorityColor = (prio) => {
-    if (prio === 1) return '#b91c1c'; // hög
-    if (prio === 2) return '#fbbf24'; // medium
-    return '#047857'; // låg
+    if (prio === 1) return '#b91c1c'; 
+    if (prio === 2) return '#fbbf24'; 
+    return '#047857'; 
   };
 
   return (

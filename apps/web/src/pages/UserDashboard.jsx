@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { getTickets, createTicket } from "../api";
+import { getTickets, createTicket } from "../api.js";
+import TicketChat from "../components/MessageBox.jsx"; 
 import styles from "./styles/UserDashboard.module.css";
 
 export default function UserDashboard({ user, onLogout }) {
@@ -7,6 +8,7 @@ export default function UserDashboard({ user, onLogout }) {
   const [form, setForm] = useState({ title: "", desc: "", priority: 2 });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [activeTicket, setActiveTicket] = useState(null); 
 
   useEffect(() => {
     (async () => {
@@ -27,7 +29,7 @@ export default function UserDashboard({ user, onLogout }) {
     try {
       setLoading(true);
       const created = await createTicket(form);
-      setTickets(prev => [created, ...prev]);
+      setTickets((prev) => [created, ...prev]);
       setForm({ title: "", desc: "", priority: 2 });
     } catch {
       setError("Kunde inte skapa ärendet");
@@ -41,7 +43,9 @@ export default function UserDashboard({ user, onLogout }) {
       <header className={styles.header}>
         <h1>E-Anmälan</h1>
         <div className={styles.userInfo}>
-          <p>Inloggad som: <strong>{user.username}</strong></p>
+          <p>
+            Inloggad som: <strong>{user.username}</strong>
+          </p>
           <button onClick={onLogout}>Logga ut</button>
         </div>
       </header>
@@ -65,7 +69,9 @@ export default function UserDashboard({ user, onLogout }) {
             Prioritet:
             <select
               value={form.priority}
-              onChange={(e) => setForm({ ...form, priority: Number(e.target.value) })}
+              onChange={(e) =>
+                setForm({ ...form, priority: Number(e.target.value) })
+              }
             >
               <option value={1}>1 — Hög</option>
               <option value={2}>2 — Medium</option>
@@ -84,27 +90,36 @@ export default function UserDashboard({ user, onLogout }) {
         {tickets.length === 0 ? (
           <p>Inga ärenden ännu.</p>
         ) : (
-          <ul className={styles.ticketListInner}>
-          {tickets.map((t) => (
-            <li
-              key={t.id}
-              className={`${styles.ticket} ${
-                selectedTicket?.id === t.id ? styles.active : ""
-              }`}
-              onClick={() => setSelectedTicket(t)}
-            >
-              <h3>{t.title}</h3>
-              <p>{t.desc}</p>
-              <p><strong>Prioritet:</strong> {t.priority}</p>
-              <p><strong>Status:</strong> {t.status}</p>
-              <p><small>Skapad: {new Date(t.createdAt).toLocaleString()}</small></p>
-            </li>
-          ))}
-        </ul>
-
-
+          <ul>
+            {tickets.map((t) => (
+              <li key={t.id} className={styles.ticket}>
+                <h3>{t.title}</h3>
+                <p>{t.desc}</p>
+                <p>
+                  <strong>Prioritet:</strong> {t.priority}
+                </p>
+                <p>
+                  <strong>Status:</strong> {t.status}
+                </p>
+                <button
+                  className={styles.chatButton}
+                  onClick={() => setActiveTicket(t.id)} 
+                >
+                  Öppna konversation
+                </button>
+              </li>
+            ))}
+          </ul>
         )}
       </section>
+
+      {activeTicket && (
+        <TicketChat
+          ticketId={activeTicket}
+          user={user}
+          onClose={() => setActiveTicket(null)} 
+        />
+      )}
     </div>
   );
 }

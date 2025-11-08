@@ -22,7 +22,7 @@ model User {
 }
 
 model Ticket {
-  id        String    @id @default(cuid())   // ✅ Fix: auto-genererar ID
+  id        String    @id @default(cuid())  
   title     String
   desc      String
   priority  Int

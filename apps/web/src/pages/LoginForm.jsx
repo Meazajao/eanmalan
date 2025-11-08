@@ -35,11 +35,11 @@ export default function LoginForm({ onLogin }) {
       const data = await res.json();
 
       if (mode === "login") {
-        // 👇 Spara token OCH user-data
+        //  Spara token OCH user-data
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        // 👇 Skicka båda till App.jsx
+     
         onLogin(data.user, data.token);
       } else {
         alert("Konto skapat! Du kan nu logga in ✅");
