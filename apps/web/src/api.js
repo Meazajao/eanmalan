@@ -1,54 +1,125 @@
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3001";
 
-// Token
-export function getAuthHeaders() {
-  const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
+async function request(path, opts = {}) {
+  const url = `${API_BASE}${path}`;
+
+  const init = {
+    method: opts.method || "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...(opts.headers || {}),
+    },
+    credentials: "include",
+    ...opts,
+  };
+
+  if (init.body === undefined) {
+    delete init.body;
+  }
+
+  const res = await fetch(url, init);
+  const text = await res.text();
+
+  let body = null;
+  try {
+    body = text ? JSON.parse(text) : null;
+  } catch {
+    body = text || null;
+  }
+
+  if (!res.ok) {
+    const message =
+      (body && typeof body === "object" && body.error) ||
+      (typeof body === "string" && body) ||
+      `Request failed: ${res.status}`;
+
+    const err = new Error(message);
+    err.status = res.status;
+    err.body = body;
+    throw err;
+  }
+
+  return body;
+}
+
+function buildQuery(params = {}) {
+  const entries = Object.entries(params).filter(
+    ([, v]) => v !== undefined && v !== null && v !== ""
+  );
+
+  if (!entries.length) return "";
+
+  const q = entries
+    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+    .join("&");
+
+  return `?${q}`;
+}
+
+// Auth
+export function register(payload) {
+  return request("/auth/register", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function login(payload) {
+  return request("/auth/login", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function logout() {
+  return request("/auth/logout", { method: "POST" });
+}
+
+export function me() {
+  return request("/auth/me", { method: "GET" });
 }
 
 // Tickets
-export async function getTickets() {
-  const r = await fetch(`${API_BASE}/tickets`, {
-    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-  });
-  if (!r.ok) throw new Error("GET /tickets failed");
-  return r.json();
+export function getTickets({ limit, offset, status, search } = {}) {
+  const qp = buildQuery({ limit, offset, status, search });
+  return request(`/tickets${qp}`, { method: "GET" });
 }
 
-export async function createTicket({ title, desc, priority = 2 }) {
-  const r = await fetch(`${API_BASE}/tickets`, {
+export function getTicket(id) {
+  if (!id) throw new Error("Ticket id saknas");
+  return request(`/tickets/${encodeURIComponent(id)}`, { method: "GET" });
+}
+
+export function createTicket({ title, desc, priority = 2 }) {
+  return request("/tickets", {
     method: "POST",
-    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify({ title, desc, priority }),
   });
-  if (!r.ok) throw new Error("POST /tickets failed");
-  return r.json();
 }
 
-export async function closeTicket(id) {
-  const r = await fetch(`${API_BASE}/tickets/${id}/close`, {
+export function closeTicket(id) {
+  if (!id) throw new Error("Ticket id saknas");
+
+  return request(`/tickets/${encodeURIComponent(id)}/close`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
   });
-  if (!r.ok) throw new Error("PATCH /tickets/:id/close failed");
-  return r.json();
 }
 
-//  Messages
-export async function getMessages(ticketId) {
-  const r = await fetch(`${API_BASE}/messages/${ticketId}`, {
-    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+// Messages
+export function getMessages(ticketId, { limit, offset } = {}) {
+  if (!ticketId) throw new Error("ticketId saknas");
+
+  const qp = buildQuery({ limit, offset });
+  return request(`/messages/${encodeURIComponent(ticketId)}${qp}`, {
+    method: "GET",
   });
-  if (!r.ok) throw new Error("GET /messages failed");
-  return r.json();
 }
 
-export async function sendMessage(ticketId, text) {
-  const r = await fetch(`${API_BASE}/messages/${ticketId}`, {
+export function sendMessage(ticketId, text) {
+  if (!ticketId) throw new Error("ticketId saknas");
+
+  return request(`/messages/${encodeURIComponent(ticketId)}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify({ text }),
   });
-  if (!r.ok) throw new Error("POST /messages failed");
-  return r.json();
 }

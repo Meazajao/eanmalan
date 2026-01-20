@@ -1,20 +1,32 @@
+import prisma from "../prismaClient.js";
 import jwt from "jsonwebtoken";
 
-export function authenticate (req, res , next) {
-    const authHeader = req.headers.authorization;
+export async function authenticate(req, res, next) {
+  try {
+    const token = req.cookies?.token;
 
-    if (!authHeader || !authHeader.startsWith("Bearer")) {
-        return res.status(401).json({ error: "Saknar auktorisering"});
+    if (!token) {
+      return res.status(401).json({ error: "Ej autentiserad" });
     }
-    
-    const token = authHeader.split(" ")[1];
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (err) {
-        console.error("Ogiltig token:", err);
-        return res.status(401).json({ error: "Ogiltig token" });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!decoded?.id) {
+      return res.status(401).json({ error: "Ogiltig token" });
     }
+
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+    });
+
+    if (!user) {
+      return res.status(401).json({ error: "Ej autentiserad" });
+    }
+
+    req.user = user;
+    next();
+  } catch (err) {
+    console.error("Auth middleware fel:", err.message);
+    res.status(401).json({ error: "Ogiltig token" });
+  }
 }

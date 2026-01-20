@@ -1,77 +1,66 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// apps/web/src/App.jsx
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import LoginForm from "./pages/LoginForm.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import AdminTicketPage from "./pages/AdminTicketPage.jsx";
 import UserDashboard from "./pages/UserDashboard.jsx";
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
+import { me } from "./api.js";
 import "./App.css";
 
-export default function App() {
+function AppWrapper() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-
-    if (token && storedUser) {
+    let mounted = true;
+    (async () => {
       try {
-        const parsedUser = JSON.parse(storedUser);
-        if (!parsedUser.role) parsedUser.role = "USER";
-        setUser(parsedUser);
+        const backendUser = await me();
+        if (mounted && backendUser) setUser(backendUser);
       } catch {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        setUser(null);
+      } finally {
+        if (mounted) setLoading(false);
       }
-    }
-    setLoading(false);
+    })();
+    return () => (mounted = false);
   }, []);
 
-  function handleLogin(userData, token) {
-    if (!userData.role) userData.role = "USER";
-
+  function handleLogin(userData) {
     setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", token);
-
-    if (userData.role === "ADMIN") {
-      window.location.href = "/admin";
-    } else {
-      window.location.href = "/user";
-    }
+    navigate(userData.role === "ADMIN" ? "/admin" : "/user");
   }
 
   function handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
     setUser(null);
-    window.location.href = "/login"; // redirect efter logout
+    navigate("/login");
   }
 
-  if (loading) return <p>Laddar...</p>;
+  if (loading) return <div className="flex items-center justify-center min-h-screen"><p className="text-xl font-semibold text-gray-500">Laddar...</p></div>;
 
   return (
-    <Router>
     <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+      <Route path="/user" element={<ProtectedRoute user={user} requiredRole="USER"><UserDashboard user={user} onLogout={handleLogout} /></ProtectedRoute>} />
+      <Route path="/admin" element={<ProtectedRoute user={user} requiredRole="ADMIN"><AdminDashboard user={user} onLogout={handleLogout} /></ProtectedRoute>} />
       <Route
-        path="/user"
-        element={
-          <ProtectedRoute user={user} requiredRole="USER">
-            <UserDashboard user={user} onLogout={handleLogout} />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute user={user} requiredRole="ADMIN">
-            <AdminDashboard user={user} onLogout={handleLogout} />
-          </ProtectedRoute>
-        }
-      />
+  path="/admin/tickets/:id"
+  element={
+    <ProtectedRoute user={user} requiredRole="ADMIN">
+      <AdminTicketPage user={user} onLogout={handleLogout} />
+    </ProtectedRoute>
+  }
+/>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  </Router>
-  
   );
+}
+
+export default function App() {
+  return <Router><AppWrapper /></Router>;
 }

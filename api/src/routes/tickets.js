@@ -1,11 +1,15 @@
 import express from "express";
-import { getTickets, createTicket, closeTicket } from "../controllers/ticketsController.js";
+import { getTickets, createTicket, closeTicket, getTicketById } from "../controllers/ticketsController.js";
 import { authenticate } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", authenticate, getTickets);
-router.post("/", authenticate, createTicket);
-router.patch("/:id/close", authenticate, closeTicket);
+// Alla tickets-routes kräver autentisering
+router.use(authenticate);
+
+router.get("/", getTickets);
+router.get("/:id", getTicketById);
+router.post("/", createTicket);
+router.patch("/:id/close", closeTicket);
 
 export default router;

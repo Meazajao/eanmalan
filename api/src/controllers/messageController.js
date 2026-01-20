@@ -1,15 +1,35 @@
 import prisma from "../prismaClient.js";
 
-// Hämta alla meddelanden för ett ärende
+// GET /messages/:ticketId?limit=50&offset=0
 export async function getMessages(req, res) {
   try {
     const { ticketId } = req.params;
 
+    const limit = Math.min(
+      parseInt(req.query.limit || "50", 10),
+      200
+    );
+    const offset = Math.max(
+      parseInt(req.query.offset || "0", 10),
+      0
+    );
+
+    if (!ticketId) {
+      return res.status(400).json({ error: "Ticket ID saknas" });
+    }
+
     const messages = await prisma.message.findMany({
       where: { ticketId },
       orderBy: { createdAt: "asc" },
+      skip: offset,
+      take: limit,
       include: {
-        sender: { select: { username: true, role: true } },
+        sender: {
+          select: {
+            username: true,
+            role: true,
+          },
+        },
       },
     });
 
@@ -20,15 +40,20 @@ export async function getMessages(req, res) {
   }
 }
 
-// Skicka ett nytt meddelande
 export async function sendMessage(req, res) {
   try {
     const { ticketId } = req.params;
     const { text } = req.body;
     const user = req.user;
 
+    if (!ticketId) {
+      return res.status(400).json({ error: "Ticket ID saknas" });
+    }
+
     if (!text || !text.trim()) {
-      return res.status(400).json({ error: "Meddelande kan inte vara tomt" });
+      return res
+        .status(400)
+        .json({ error: "Meddelande kan inte vara tomt" });
     }
 
     const ticket = await prisma.ticket.findUnique({
@@ -40,9 +65,7 @@ export async function sendMessage(req, res) {
     }
 
     if (user.role !== "ADMIN" && user.id !== ticket.userId) {
-      return res.status(403).json({
-        error: "Du har inte behörighet att skicka meddelande i detta ärende",
-      });
+      return res.status(403).json({ error: "Du har inte behörighet" });
     }
 
     const message = await prisma.message.create({
@@ -51,7 +74,14 @@ export async function sendMessage(req, res) {
         senderId: user.id,
         ticketId,
       },
-      include: { sender: { select: { username: true, role: true } } },
+      include: {
+        sender: {
+          select: {
+            username: true,
+            role: true,
+          },
+        },
+      },
     });
 
     res.status(201).json(message);
