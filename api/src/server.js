@@ -22,12 +22,28 @@ app.use(cookieParser());
 
 // CORS
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+
+const allowedOrigins = [
+  FRONTEND_URL,
+  "http://localhost:5173",
+];
+
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin: function (origin, callback) {
+      // tillåt requests utan origin (t.ex. curl/postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS: " + origin));
+    },
     credentials: true,
   })
 );
+
 
 // Logger
 if (process.env.NODE_ENV !== "production") {
