@@ -1,58 +1,69 @@
-├── api/                        #  Backend (Node.js + Express + Prisma)
+├── api/                         # 🧠 Backend (Node.js + Express + Prisma)
 │   ├── node_modules/
-│   ├── prisma/                 # Prisma schema & migrations
+│   ├── prisma/                  # Prisma schema & migrations
+│   │
 │   ├── src/
-│   │   ├── controllers/        # Hanterar logik för olika resurser
+│   │   ├── controllers/         # Controller-logik
 │   │   │   ├── authController.js
 │   │   │   ├── messageController.js
 │   │   │   └── ticketsController.js
-│   │   ├── middleware/         # Middleware-funktioner (ex. auth)
+│   │   │
+│   │   ├── middleware/          # Middleware (auth, skydd)
 │   │   │   └── authMiddleware.js
-│   │   ├── routes/             # API-rutter (kopplas till controllers)
+│   │   │
+│   │   ├── routes/              # API-routes
 │   │   │   ├── auth.js
 │   │   │   ├── message.js
 │   │   │   └── tickets.js
-│   │   ├── prismaClient.js     # Initierar och exporterar Prisma-klienten
-│   │   └── server.js           # Startar Express-servern
-│   ├── .env                    # Miljövariabler (t.ex. DATABASE_URL, JWT_SECRET)
+│   │   │
+│   │   ├── prismaClient.js      # Prisma client
+│   │   └── server.js            # Startar Express-servern
+│   │
+│   ├── .env
 │   ├── .gitignore
 │   ├── package.json
 │   └── package-lock.json
 │
 ├── apps/
-│   └── web/                    # 💻 Frontend (React + Vite)
+│   └── web/                     # 💻 Frontend (React + Vite)
 │       ├── node_modules/
-│       ├── public/             # Statisk innehåll (bilder, favicon m.m.)
+│       ├── public/
+│       │
 │       ├── src/
-│       │   ├── assets/         # Bilder, ikoner, etc.
+│       │   ├── assets/          # Bilder, ikoner
 │       │   │
-│       │   ├── components/     # Återanvändbara UI-komponenter
-│       │   │   ├── admin/      # 🛠 Admin-specifika komponenter
-│       │   │   │   ├── AdminLayout.jsx      # Layout för admin-vyer
-│       │   │   │   ├── TicketTable.jsx      # Tabell för alla ärenden
-│       │   │   │   ├── TicketDrawer.jsx     # Sidopanel för valt ärende
-│       │   │   ├──User/
+│       │   ├── components/      # Återanvändbara UI-komponenter
+│       │   │   ├── admin/       # Admin-specifika komponenter
+│       │   │   │   ├── AdminLayout.jsx
+│       │   │   │   └── TicketTable.jsx
+│       │   │   │
+│       │   │   ├── messages/    # Meddelanden / chat
+│       │   │   │   ├── MessageBox.jsx
+│       │   │   │   └── MessageModal.jsx
+│       │   │   │
+│       │   │   ├── user/        # User-specifika komponenter
 │       │   │   │   ├── TicketCard.jsx
-│       │   │   │   ├── UserLayout.jsx
-│       │   │   |
-│       │   │   ├── MessageBox.jsx
-│       │   │   ├── TicketForm.jsx
-│       │   │   ├── TicketItem.jsx
-│       │   │   └── TicketList.jsx
+│       │   │   │   └── UserLayout.jsx
+│       │   │   │
+│       │   │   ├── tickets/     # Ticket-relaterade komponenter
+│       │   │   │   ├── TicketForm.jsx
+│       │   │   │   ├── TicketItem.jsx
+│       │   │   │   └── TicketList.jsx
 │       │   │
-│       │   ├── pages/          # Huvudsidor i appen
-│       │   │   ├── AdminDashboard.jsx       # (kan tas bort om admin/ används)
-│       │   │   ├── LoginForm.jsx
-│       │   │   └── UserDashboard.jsx
+│       │   ├── pages/           # Sidor (routes)
+│       │   │   ├── AdminDashboard.jsx
+│       │   │   ├── AdminTicketPage.jsx
+│       │   │   ├── UserDashboard.jsx
+│       │   │   └── LoginForm.jsx
 │       │   │
-│       │   ├── routes/         # Hanterar navigering och skyddade routes
+│       │   ├── routes/          # Route-skydd
 │       │   │   └── ProtectedRoute.jsx
 │       │   │
-│       │   ├── api.js          # Kommunikation med backend (fetch/axios)
-│       │   ├── App.css
+│       │   ├── api.js           # Frontend → Backend API
 │       │   ├── App.jsx
-│       │   ├── index.css
+│       │   ├── App.css
 │       │   ├── index.jsx
+│       │   ├── index.css
 │       │   └── main.jsx
 │       │
 │       ├── .env.development
