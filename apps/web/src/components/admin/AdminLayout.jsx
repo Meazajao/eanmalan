@@ -27,7 +27,6 @@ export default function AdminLayout({
         type="button"
         onClick={() => onChangeFilter(key)}
         className={[
-          // Mobil: chips / Desktop: fullbredd-knapp
           "shrink-0 md:w-full md:text-left px-3 py-2 rounded text-sm font-medium border",
           isActive
             ? "bg-slate-800 text-slate-100 border-slate-700"
@@ -41,7 +40,6 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-slate-100 md:flex">
-      {/* ASIDE: toppbar på mobil, sidomeny på desktop */}
       <aside className="bg-slate-900 text-slate-100 md:w-64 md:min-h-screen md:flex md:flex-col">
         <div className="px-4 sm:px-6 py-4 border-b border-slate-700">
           <h1 className="text-lg font-semibold">Ärendehantering</h1>
@@ -51,9 +49,7 @@ export default function AdminLayout({
         {showFilters ? (
           <nav
             className={[
-              // Mobil: horisontell filter-rad med scroll
               "px-4 sm:px-6 py-3 flex gap-2 overflow-x-auto",
-              // Desktop: vertikal lista
               "md:flex-1 md:flex-col md:space-y-2 md:overflow-visible",
             ].join(" ")}
           >
@@ -65,9 +61,7 @@ export default function AdminLayout({
           <div className="hidden md:block md:flex-1" />
         )}
 
-        {/* Mobil: komprimerad user-rad | Desktop: klassisk block */}
         <div className="px-4 sm:px-6 py-4 border-t border-slate-700 text-xs">
-          {/* Mobilrad */}
           <div className="flex items-center justify-between gap-3 md:hidden">
             <div className="min-w-0">
               <span className="text-slate-300">Inloggad som </span>
@@ -85,7 +79,6 @@ export default function AdminLayout({
             </button>
           </div>
 
-          {/* Desktopblock */}
           <div className="hidden md:block">
             Inloggad som
             <br />
@@ -115,8 +108,7 @@ export default function AdminLayout({
             />
           )}
         </header>
-
-        <section className="flex-1 p-4 sm:p-6 md:p-8 min-w-0">
+        <section className="flex-1 px-3 py-4 sm:p-6 md:p-8 min-w-0">
           {children}
         </section>
 

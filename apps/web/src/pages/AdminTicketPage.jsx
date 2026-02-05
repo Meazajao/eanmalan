@@ -243,7 +243,7 @@ export default function AdminTicketPage({ user, onLogout }) {
                       </span>
                     </div>
 
-                    <p className="text-sm text-slate-800 leading-relaxed break-words whitespace-pre-wrap">
+                    <p className="text-sm text-slate-800 leading-relaxed wrap-break-word whitespace-pre-wrap">
                       {ticket.desc || "Ingen beskrivning."}
                     </p>
                   </div>
@@ -282,7 +282,7 @@ export default function AdminTicketPage({ user, onLogout }) {
 
                       <div className="flex items-center justify-between gap-3 min-w-0">
                         <dt className="text-slate-500">Ärende-ID</dt>
-                        <dd className="text-slate-700 font-mono text-xs max-w-[180px] sm:max-w-[240px] overflow-x-auto whitespace-nowrap">
+                        <dd className="text-slate-700 font-mono text-xs max-w-[180px] sm:max-w-60 overflow-x-auto whitespace-nowrap">
                           {ticket.id}
                         </dd>
                       </div>
