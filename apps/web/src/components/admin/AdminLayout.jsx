@@ -95,7 +95,7 @@ export default function AdminLayout({
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col min-w-0">
+      <main className="flex-1 flex flex-col min-w-0 min-h-screen md:min-h-0 md:h-screen">
         <header className="bg-white border-b border-slate-300 px-4 sm:px-6 md:px-8 py-4 space-y-3">
           <h2 className="text-xl font-semibold text-slate-800">{title}</h2>
 
@@ -108,7 +108,7 @@ export default function AdminLayout({
             />
           )}
         </header>
-        <section className="flex-1 px-3 py-4 sm:p-6 md:p-8 min-w-0">
+        <section className="flex-1 px-3 py-4 sm:p-6 md:p-8 min-w-0 flex flex-col">
           {children}
         </section>
 

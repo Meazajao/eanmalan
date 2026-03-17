@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createTicket, getTickets } from "../api.js";
 import MessageBox from "../components/messages/MessageBox.jsx";
+import MessageModal from "../components/messages/MessageModal.jsx";
 import UserLayout from "../components/user/UserLayout.jsx";
 import TicketCard from "../components/user/TicketCard.jsx";
 
@@ -242,37 +243,13 @@ export default function UserDashboard({ user, onLogout }) {
         </section>
       </div>
 
-      {activeTicket && (
-        <div className="fixed inset-0 z-50 flex">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setActiveTicket(null)}
-          />
-
-          <aside className="relative ml-auto w-full max-w-2xl h-full bg-white shadow-2xl flex flex-col">
-            <div className="flex justify-between items-center px-5 py-4 border-b border-slate-200 bg-white">
-              <div className="min-w-0">
-                <h3 className="font-semibold text-slate-900">Meddelanden</h3>
-                <p className="text-xs text-slate-500 mt-1 truncate">
-                  Ärende #{activeTicket}
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setActiveTicket(null)}
-                className="px-3 py-2 rounded-xl text-sm font-semibold bg-slate-900 text-yellow-300 hover:bg-slate-800 transition"
-              >
-                Stäng
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-hidden">
-              <MessageBox ticketId={activeTicket} user={user} />
-            </div>
-          </aside>
-        </div>
-      )}
+      <MessageModal
+  open={!!activeTicket}
+  ticketId={activeTicket}
+  user={user}
+  onClose={() => setActiveTicket(null)}
+  variant="slide"
+/>
     </UserLayout>
   );
 }

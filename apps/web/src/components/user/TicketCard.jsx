@@ -34,7 +34,7 @@ export default function TicketCard({
     <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
       <div className="flex justify-between items-start gap-4">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-slate-900 break-words">
+          <h3 className="font-semibold text-slate-900 wrap-break-word">
             {ticket.title}
           </h3>
           <p className="text-xs text-slate-500 mt-1">
@@ -61,7 +61,7 @@ export default function TicketCard({
         </div>
       </div>
 
-      <p className="text-sm text-slate-700 mt-3 leading-relaxed break-words whitespace-pre-wrap">
+      <p className="text-sm text-slate-700 mt-3 leading-relaxed wrap-break-word whitespace-pre-wrap">
         {showText}
       </p>
 

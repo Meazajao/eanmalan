@@ -124,7 +124,7 @@ export default function MessageBox({ ticketId, user }) {
                         : "bg-white text-slate-900 border-slate-200",
                     ].join(" ")}
                   >
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap wrap-break-word">
                       {m.text}
                     </p>
 

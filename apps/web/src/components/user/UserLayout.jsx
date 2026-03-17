@@ -1,6 +1,6 @@
 export default function UserLayout({ user, onLogout, children }) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-50 via-slate-50 to-white">
+      <div className="min-h-screen flex flex-col bg-linear-to-b from-slate-50 via-slate-50 to-white">
         <header className="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-xl border-b border-slate-800 shadow-sm">
           <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
             <div className="flex flex-col">

@@ -19,7 +19,7 @@ export default function TicketTable({ tickets, loading, error }) {
               <th className="hidden md:table-cell p-3 text-left">Datum</th>
 
               <th className="p-3 text-left">Status</th>
-              <th className="p-3 text-right">Åtgärd</th>
+              <th className="hidden sm:table-cell p-3 text-right">Åtgärd</th>
             </tr>
           </thead>
 
@@ -31,7 +31,11 @@ export default function TicketTable({ tickets, loading, error }) {
                 : "—";
 
               return (
-                <tr key={t.id} className="border-t hover:bg-slate-50">
+                <tr
+  key={t.id}
+  className="border-t hover:bg-slate-50 cursor-pointer sm:cursor-default"
+  onClick={() => navigate(`/admin/tickets/${t.id}`)}
+>
                   <td className="p-3 font-medium text-slate-900">
                     <div className="wrap-break-word">{t.title}</div>
 
@@ -62,15 +66,18 @@ export default function TicketTable({ tickets, loading, error }) {
                     </span>
                   </td>
 
-                  <td className="p-3 text-right">
-                    <button
-                      type="button"
-                      onClick={() => navigate(`/admin/tickets/${t.id}`)}
-                      className="inline-flex w-full sm:w-auto justify-center px-3 py-2 rounded-lg text-sm font-semibold border border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
-                    >
-                      Öppna
-                    </button>
-                  </td>
+                  <td className="hidden sm:table-cell p-3 text-right">
+  <button
+    type="button"
+    onClick={(e) => {
+      e.stopPropagation();
+      navigate(`/admin/tickets/${t.id}`);
+    }}
+    className="inline-flex w-full sm:w-auto justify-center px-3 py-2 rounded-lg text-sm font-semibold border border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+  >
+    Öppna
+  </button>
+</td>
                 </tr>
               );
             })}
