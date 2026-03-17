@@ -44,14 +44,12 @@ export default function LoginForm({ onLogin }) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen" style={{ minHeight: "100dvh" }}>
       <header className="bg-slate-900 p-6 shadow-md">
         <h1 className="text-3xl font-bold text-white text-center">E-Anmälan</h1>
       </header>
 
-      <main
-  className={`flex-1 flex items-center justify-center ${gradientBg} p-4`}
->
+      <main className={`flex-1 flex items-center justify-center ${gradientBg} p-4`} style={{ minHeight: 0 }}>
   <div className="w-full max-w-md p-8 sm:p-10 bg-slate-800 rounded-3xl shadow-2xl space-y-6">
     <h2 className="text-3xl font-extrabold text-white text-center">
       {mode === "login" ? "Logga in" : "Skapa konto"}
